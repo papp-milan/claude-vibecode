@@ -1,0 +1,76 @@
+<div class="wheel-app">
+  <div class="header-row">
+    <h1>Wheel of Fortune</h1>
+    <app-theme-toggle />
+  </div>
+
+  <div class="main-row">
+    <mat-card class="names-card">
+      <mat-card-content>
+        <div class="add-row">
+          <mat-form-field appearance="outline" class="name-field" subscriptSizing="dynamic">
+            <mat-label>Name eingeben</mat-label>
+            <input
+              matInput
+              [ngModel]="newName()"
+              (ngModelChange)="newName.set($event)"
+              (keyup.enter)="addName()" />
+          </mat-form-field>
+          <button
+            matButton="filled"
+            color="primary"
+            class="add-btn"
+            (click)="addName()"
+            [disabled]="!newName().trim()"
+            aria-label="Name hinzufügen">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        @if (names().length > 0) {
+          <mat-list class="name-list">
+            @for (name of names(); track name; let i = $index) {
+              <mat-list-item>
+                <span matListItemTitle>{{ name }}</span>
+                <button matListItemMeta mat-icon-button color="warn" (click)="removeName(i)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-list-item>
+            }
+          </mat-list>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <div class="wheel-section">
+      <div class="wheel-wrapper">
+        <div class="pointer"></div>
+        <div
+          class="wheel"
+          [class.spinnable]="!spinning() && names().length > 0"
+          (click)="spin()"
+          [style.background]="conicGradient()"
+          [style.transform]="'rotate(' + rotation() + 'deg)'">
+          @for (name of wheelNames(); track i; let i = $index) {
+            <div class="label" [style.transform]="labelTransform(i)">
+              <span
+                [style.color]="labelColor(i)"
+                [style.font-size]="labelFontSize(name)"
+                [style.max-width]="labelMaxWidth()">
+                {{ name }}
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+      <button
+        matButton="filled"
+        color="accent"
+        class="spin-btn"
+        (click)="spin()"
+        [disabled]="spinning() || names().length === 0">
+        {{ spinning() ? 'Dreht...' : 'Drehen!' }}
+      </button>
+    </div>
+  </div>
+</div>
