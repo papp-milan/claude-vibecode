@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import {Component} from '@angular/core';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatButtonModule} from '@angular/material/button';
@@ -19,6 +19,4 @@ import {ThemeToggleComponent} from './components/theme-toggle/theme-toggle.compo
   styleUrl: './app.component.scss',
   templateUrl: './app.component.html',
 })
-export class AppComponent {
-  protected readonly title = signal('angular');
-}
+export class AppComponent {}

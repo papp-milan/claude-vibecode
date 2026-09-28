@@ -6,11 +6,13 @@ export const routes: Routes = [
   { path: '', redirectTo: 'wheel-of-fortune', pathMatch: 'full' },
   {
     path: 'wheel-of-fortune',
-    component: WheelComponent
+    component: WheelComponent,
+    title: 'Wheel Of Fortune'
   },
   {
     path: 'scrum-poker',
-    component: ScrumPokerComponent
+    component: ScrumPokerComponent,
+    title: 'Scrum Poker'
   },
   {
     path: '**',
