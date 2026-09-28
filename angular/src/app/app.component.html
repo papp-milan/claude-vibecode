@@ -1,0 +1,24 @@
+<mat-sidenav-container class="app-container">
+  <mat-sidenav mode="side" opened class="app-sidenav">
+    <div class="sidenav-inner">
+      <nav class="nav-buttons">
+        <a matButton routerLink="/wheel" routerLinkActive="active">
+          <mat-icon>casino</mat-icon>
+          Wheel of Fortune
+        </a>
+        <a matButton routerLink="/poker" routerLinkActive="active">
+          <mat-icon>style</mat-icon>
+          Scrum Poker
+        </a>
+      </nav>
+
+      <div class="sidenav-footer">
+        <app-theme-toggle />
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

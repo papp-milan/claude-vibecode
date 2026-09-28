@@ -1,0 +1,99 @@
+<div class="poker-app">
+  <h1>Scrum Poker</h1>
+
+  <div class="add-row">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Teilnehmer hinzufügen</mat-label>
+      <input
+        matInput
+        [ngModel]="newName()"
+        (ngModelChange)="newName.set($event)"
+        (keyup.enter)="addParticipant()" />
+    </mat-form-field>
+    <button
+      matButton="filled"
+      class="add-btn"
+      (click)="addParticipant()"
+      [disabled]="!newName().trim()"
+      aria-label="Teilnehmer hinzufügen">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <div class="table">
+    @for (p of participants(); track $index; let i = $index) {
+      <div
+        class="player"
+        [class.selected]="selectedIndex() === i"
+        [class.clickable]="!revealed()"
+        (click)="select(i)">
+        <button
+          mat-icon-button
+          class="remove-btn"
+          (click)="removeParticipant(i, $event)"
+          aria-label="Teilnehmer entfernen">
+          <mat-icon>close</mat-icon>
+        </button>
+
+        <div
+          class="poker-card"
+          [class.empty]="p.vote === null"
+          [class.face-down]="p.vote !== null && !revealed()"
+          [class.face-up]="revealed()">
+          @if (revealed()) {
+            @if (p.vote === 'coffee') {
+              <mat-icon>coffee</mat-icon>
+            } @else if (p.vote !== null) {
+              {{ p.vote }}
+            } @else {
+              –
+            }
+          }
+        </div>
+
+        <div class="player-name">{{ p.name }}</div>
+      </div>
+    }
+  </div>
+
+  <div class="actions">
+    @if (!revealed()) {
+      <button matButton="filled" (click)="reveal()" [disabled]="!hasVotes()">
+        <mat-icon>visibility</mat-icon>
+        Karten aufdecken
+      </button>
+    } @else {
+      <button matButton="filled" (click)="newRound()">
+        <mat-icon>refresh</mat-icon>
+        Neue Runde
+      </button>
+    }
+  </div>
+
+  @if (!revealed()) {
+    <div class="deck-section">
+      <div class="deck-title">
+        @if (selectedName()) {
+          Karte wählen für <strong>{{ selectedName() }}</strong>
+        } @else {
+          Alle haben abgestimmt
+        }
+      </div>
+
+      <div class="deck">
+        @for (card of deck; track card) {
+          <button
+            class="deck-card"
+            (click)="vote(card)"
+            [disabled]="selectedIndex() === null">
+            @if (card === 'coffee') {
+              <mat-icon>coffee</mat-icon>
+            } @else {
+              {{ card }}
+            }
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>
