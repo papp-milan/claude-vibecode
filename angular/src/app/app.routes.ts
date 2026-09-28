@@ -11,5 +11,9 @@ export const routes: Routes = [
   {
     path: 'scrum-poker',
     component: ScrumPokerComponent
+  },
+  {
+    path: '**',
+    redirectTo: 'wheel-of-fortune'
   }
 ];
