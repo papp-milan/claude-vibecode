@@ -4,6 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import {TeamMembers} from '../../constants/team-members';
 
 type CardValue = number | 'coffee';
 
@@ -23,7 +24,7 @@ export class ScrumPokerComponent {
   readonly deck: CardValue[] = ['coffee', 1, 2, 5, 8, 12, 20, 40];
 
   participants = signal<Participant[]>(
-    ['Alex', 'Anastasiia', 'André', 'Dominik', 'Geert', 'Manu', 'Milán', 'Nabil', 'Sabine']
+    TeamMembers
       .map(name => ({ name, vote: null }))
   );
   selectedIndex = signal<number | null>(0);

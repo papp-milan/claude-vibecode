@@ -10,6 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialog } from '@angular/material/dialog';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { WinnerDialogComponent, WinnerDialogData } from '../winner-dialog/winner-dialog.component';
+import {TeamMembers} from '../../constants/team-members';
 
 @Component({
   selector: 'app-wheel',
@@ -31,7 +32,7 @@ import { WinnerDialogComponent, WinnerDialogData } from '../winner-dialog/winner
 export class WheelComponent {
   private dialog = inject(MatDialog);
 
-  names = signal<string[]>(['Alex', 'Anastasiia', 'André', 'Dominik', 'Geert', 'Manu', 'Milán', 'Nabil', 'Sabine']);
+  names = signal<string[]>(TeamMembers);
   wheelNames = signal<string[]>([]);
 
   private palette = [
