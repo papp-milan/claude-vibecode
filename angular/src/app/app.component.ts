@@ -6,6 +6,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {ThemeToggleComponent} from './layout/theme-toggle/theme-toggle.component';
 
 @Component({
+  standalone: true,
   imports: [
     RouterOutlet,
     RouterLink,

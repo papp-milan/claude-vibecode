@@ -24,6 +24,7 @@ export interface BoardGhost {
 
 @Component({
   selector: 'app-battleship-board',
+  standalone: true,
   imports: [ShipGraphicComponent],
   templateUrl: './battleship-board.component.html',
   styleUrl: './battleship-board.component.scss',

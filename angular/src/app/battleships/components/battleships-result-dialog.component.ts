@@ -10,6 +10,7 @@ export interface BattleshipsResultData {
 
 @Component({
   selector: 'app-battleships-result-dialog',
+  standalone: true,
   imports: [MatDialogModule, MatButtonModule, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

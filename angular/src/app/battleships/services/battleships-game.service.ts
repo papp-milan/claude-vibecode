@@ -28,7 +28,7 @@ const BOT_THINK_TIME_MS = 800;
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 @Injectable()
-export class BattleshipsGame implements OnDestroy {
+export class BattleshipsGameService implements OnDestroy {
   private readonly bot = inject(BATTLESHIP_BOT);
   /** Wird bei Reset/Destroy erhöht, damit hängende async-Züge verworfen werden. */
   private round = 0;

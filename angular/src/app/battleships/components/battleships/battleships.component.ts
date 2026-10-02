@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {ShipGraphicComponent} from '../ship-graphic.component';
 import {BattleshipBoardComponent} from '../battleship-board/battleship-board.component';
-import {BattleshipsGame} from '../../services/battleships-game.service';
+import {BattleshipsGameService} from '../../services/battleships-game.service';
 import {Coord} from '../../models/battleship-models';
 import {BattleshipsResultData, BattleshipsResultDialogComponent} from '../battleships-result-dialog.component';
 
@@ -23,6 +23,7 @@ const PREVIEW_CELL_REM = 2.25;
 
 @Component({
   selector: 'app-battleships',
+  standalone: true,
   imports: [
     MatButtonModule,
     MatCardModule,
@@ -33,14 +34,14 @@ const PREVIEW_CELL_REM = 2.25;
     ShipGraphicComponent,
   ],
   // Komponenten-Scope: Beim Verlassen des Tabs wird das Spiel verworfen.
-  providers: [BattleshipsGame],
+  providers: [BattleshipsGameService],
   templateUrl: './battleships.component.html',
   styleUrl: './battleships.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '(window:keydown.r)': 'rotateWithKey()' },
 })
 export class BattleshipsComponent {
-  protected readonly game = inject(BattleshipsGame);
+  protected readonly game = inject(BattleshipsGameService);
   private readonly dialog = inject(MatDialog);
 
   protected readonly hover = signal<Coord | null>(null);

@@ -6,6 +6,7 @@ export type ShipVariant = 'fleet' | 'wreck' | 'ghost-ok' | 'ghost-bad';
 /** Zeichnet ein Schiff über `size` Felder (je 100 SVG-Einheiten lang). Füllt sein Elternelement komplett aus. */
 @Component({
   selector: 'app-ship-graphic',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.fleet-blue]': "color() === 'blue'",
