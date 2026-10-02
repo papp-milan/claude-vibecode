@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {WheelComponent} from './halyard/wheel-of-fortune/components/wheel/wheel.component';
 import {ScrumPokerComponent} from './halyard/scrum-poker/components/scrum-poker/scrum-poker.component';
 import {BattleshipsComponent} from './battleships/components/battleships/battleships.component';
+import {CanvasComponent} from './canvas/components/canvas/canvas.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'wheel-of-fortune', pathMatch: 'full' },
@@ -14,6 +15,11 @@ export const routes: Routes = [
     path: 'scrum-poker',
     component: ScrumPokerComponent,
     title: 'Scrum Poker'
+  },
+  {
+    path: 'canvas',
+    component: CanvasComponent,
+    title: 'Canvas'
   },
   {
     path: 'battleships',

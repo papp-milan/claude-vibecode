@@ -1,4 +1,4 @@
-import { ShapeKind } from './models/board-item.model';
+import { ShapeKind } from '../models/board-item.model';
 
 const round = (n: number) => Math.round(n * 100) / 100;
 

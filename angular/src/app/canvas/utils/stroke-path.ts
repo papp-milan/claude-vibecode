@@ -1,5 +1,5 @@
 import { getStroke } from 'perfect-freehand';
-import { PenKind, StrokePoint } from './models/board-item.model';
+import { PenKind, StrokePoint } from '../models/board-item.model';
 
 export interface PenStyle {
   sizeFactor: number;

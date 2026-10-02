@@ -1,0 +1,263 @@
+:host {
+  display: block;
+}
+
+.board {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  background-color: var(--board-bg);
+  background-image: radial-gradient(circle, var(--dot) 0.07rem, transparent 0.08rem);
+  background-repeat: repeat;
+
+  &.dark {
+    --board-bg: #1b1f24;
+    --dot: rgba(255, 255, 255, 0.2);
+  }
+
+  &.light {
+    --board-bg: #f7f7f4;
+    --dot: rgba(0, 0, 0, 0.22);
+  }
+
+  &[data-tool='select'] {
+    cursor: default;
+  }
+
+  &[data-tool='pan'],
+  &.space-pan {
+    cursor: grab;
+  }
+
+  &:is(
+      [data-tool='pen'],
+      [data-tool='brush'],
+      [data-tool='marker'],
+      [data-tool='highlighter'],
+      [data-tool='line'],
+      [data-tool='arrow'],
+      [data-tool='shape']
+    ) {
+    cursor: crosshair;
+  }
+
+  &[data-tool='eraser'] {
+    cursor: cell;
+  }
+
+  &:is([data-tool='text'], [data-tool='note']) {
+    cursor: text;
+  }
+
+  &.drop-target::after {
+    content: '';
+    position: absolute;
+    inset: 0.5rem;
+    border: 0.1875rem dashed var(--mat-sys-primary, #4fc3f7);
+    border-radius: 0.75rem;
+    background: rgba(79, 195, 247, 0.08);
+    pointer-events: none;
+  }
+}
+
+.surface {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Textfelder ---------- */
+
+.md-editor {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: inherit;
+  font:
+    0.9375rem/1.5 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
+  user-select: text;
+}
+
+/* ---------- Auswahl ---------- */
+
+.selection {
+  position: absolute;
+  border: 0.125rem solid var(--mat-sys-primary, #4fc3f7);
+  border-radius: 0.25rem;
+  pointer-events: none;
+}
+
+.selection-handle {
+  position: absolute;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #fff;
+  border: 0.125rem solid var(--mat-sys-primary, #4fc3f7);
+  border-radius: 0.1875rem;
+  box-sizing: border-box;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+
+  &[data-handle='nw'] {
+    left: 0;
+    top: 0;
+    cursor: nwse-resize;
+  }
+  &[data-handle='n'] {
+    left: 50%;
+    top: 0;
+    cursor: ns-resize;
+  }
+  &[data-handle='ne'] {
+    left: 100%;
+    top: 0;
+    cursor: nesw-resize;
+  }
+  &[data-handle='e'] {
+    left: 100%;
+    top: 50%;
+    cursor: ew-resize;
+  }
+  &[data-handle='se'] {
+    left: 100%;
+    top: 100%;
+    cursor: nwse-resize;
+  }
+  &[data-handle='s'] {
+    left: 50%;
+    top: 100%;
+    cursor: ns-resize;
+  }
+  &[data-handle='sw'] {
+    left: 0;
+    top: 100%;
+    cursor: nesw-resize;
+  }
+  &[data-handle='w'] {
+    left: 0;
+    top: 50%;
+    cursor: ew-resize;
+  }
+}
+
+.marquee {
+  position: absolute;
+  border: 0.0625rem dashed var(--mat-sys-primary, #4fc3f7);
+  background: rgba(79, 195, 247, 0.12);
+  pointer-events: none;
+}
+
+/* ---------- Lineal (1 cm = 1 cm, wie ein echtes Lineal) ---------- */
+
+.ruler {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  box-sizing: border-box;
+  width: 20cm;
+  height: 2.5cm;
+  transform-origin: 50% 50%;
+  border: 0.0625rem solid rgba(120, 80, 0, 0.7);
+  border-radius: 0.25rem;
+  background-color: rgba(255, 213, 79, 0.78);
+  background-image:
+    repeating-linear-gradient(90deg, #4e342e 0 0.0625rem, transparent 0.0625rem 1cm),
+    repeating-linear-gradient(90deg, #4e342e 0 0.0625rem, transparent 0.0625rem 1mm),
+    repeating-linear-gradient(90deg, #4e342e 0 0.0625rem, transparent 0.0625rem 1cm),
+    repeating-linear-gradient(90deg, #4e342e 0 0.0625rem, transparent 0.0625rem 1mm);
+  background-repeat: no-repeat;
+  background-size:
+    100% 0.6cm,
+    100% 0.3cm,
+    100% 0.6cm,
+    100% 0.3cm;
+  background-position:
+    0 0,
+    0 0,
+    0 100%,
+    0 100%;
+  color: #4e342e;
+  cursor: move;
+  touch-action: none;
+}
+
+.ruler-label {
+  position: absolute;
+  top: 0.7cm;
+  transform: translateX(-50%);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.ruler-button {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  transform: translateY(-50%);
+
+  mat-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    font-size: 1.125rem;
+  }
+}
+
+.ruler-close {
+  left: 0.375rem;
+  cursor: pointer;
+}
+
+.ruler-rotate {
+  right: 0.375rem;
+  cursor: grab;
+}
+
+/* ---------- Leerer Zustand ---------- */
+
+.empty-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 1rem;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant, #90a4ae);
+  pointer-events: none;
+
+  strong {
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+}
+
+.board.light .empty-hint {
+  color: #607d8b;
+}

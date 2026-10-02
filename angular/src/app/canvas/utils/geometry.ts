@@ -1,7 +1,7 @@
-import { MIN_ITEM_SIZE } from './constants/sandbox.constants';
-import { BoardItem, BoxItem, LineItem } from './models/board-item.model';
-import { Point, Rect } from './models/geometry.model';
-import { ResizeHandle } from './models/tool.model';
+import { MIN_ITEM_SIZE } from '../constants/canvas.constants';
+import { BoardItem, BoxItem, LineItem } from '../models/board-item.model';
+import { Point, Rect } from '../models/geometry.model';
+import { ResizeHandle } from '../models/tool.model';
 import { penWidth } from './stroke-path';
 
 const round = (n: number) => Math.round(n * 100) / 100;

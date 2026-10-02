@@ -1,0 +1,166 @@
+<div
+  #host
+  class="board"
+  [class.dark]="store.background() === 'dark'"
+  [class.light]="store.background() === 'light'"
+  [class.space-pan]="spaceDown()"
+  [class.drop-target]="dropActive()"
+  [attr.data-tool]="store.tool()"
+  [style.background-size.px]="gridStep()"
+  [style.background-position]="gridPosition()"
+  (pointerdown)="onPointerDown($event)"
+  (pointermove)="onPointerMove($event)"
+  (pointerup)="onPointerUp($event)"
+  (pointercancel)="onPointerUp($event)"
+  (wheel)="onWheel($event)"
+  (dblclick)="onDoubleClick($event)"
+  (contextmenu)="$event.preventDefault()"
+  (dragenter)="onDragOver($event)"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+>
+  <svg class="surface" role="img" aria-label="Zeichenfläche">
+    <g [attr.transform]="worldTransform()">
+      @for (item of renderItems(); track item.id) {
+        @switch (item.type) {
+          @case ('stroke') {
+            <path
+              [attr.d]="item.path"
+              [attr.fill]="item.color"
+              [attr.opacity]="strokeOpacity(item.kind)"
+              [attr.transform]="translate(item.x, item.y)"
+            />
+          }
+          @case ('shape') {
+            <path
+              [attr.d]="item.shape | shapePath: item.w : item.h"
+              [attr.transform]="translate(item.x, item.y)"
+              [attr.fill]="item.fill ?? 'none'"
+              [attr.stroke]="item.stroke"
+              [attr.stroke-width]="item.strokeWidth"
+              stroke-linejoin="round"
+            />
+          }
+          @case ('line') {
+            @let g = lineGeometry(item);
+            <line
+              [attr.x1]="item.x1"
+              [attr.y1]="item.y1"
+              [attr.x2]="g.x2"
+              [attr.y2]="g.y2"
+              [attr.stroke]="item.color"
+              [attr.stroke-width]="item.size"
+              stroke-linecap="round"
+            />
+            @if (item.arrow) {
+              <path [attr.d]="g.head" [attr.fill]="item.color" />
+            }
+          }
+          @case ('image') {
+            <image
+              [attr.href]="item.src"
+              [attr.x]="item.x"
+              [attr.y]="item.y"
+              [attr.width]="item.w"
+              [attr.height]="item.h"
+              preserveAspectRatio="none"
+            />
+          }
+          @case ('text') {
+            <foreignObject
+              [attr.x]="item.x"
+              [attr.y]="item.y"
+              [attr.width]="item.w"
+              [attr.height]="item.h"
+              overflow="hidden"
+            >
+              <div
+                class="text-box"
+                [class.note]="item.variant === 'note'"
+                [style.background]="item.background"
+                [style.color]="item.color"
+              >
+                @if (store.editingId() === item.id) {
+                  <textarea
+                    class="md-editor"
+                    spellcheck="false"
+                    placeholder="Markdown eingeben …"
+                    [value]="item.markdown"
+                    (input)="onEditorInput(item, $event)"
+                    (keydown)="onEditorKeydown($event)"
+                    (blur)="stopEditing()"
+                    (pointerdown)="$event.stopPropagation()"
+                  ></textarea>
+                } @else {
+                  <app-markdown-view [attr.data-md-id]="item.id" [source]="item.markdown" />
+                }
+              </div>
+            </foreignObject>
+          }
+        }
+      }
+    </g>
+  </svg>
+
+  @if (selectionBox(); as box) {
+    <div
+      class="selection"
+      [style.left.px]="box.left"
+      [style.top.px]="box.top"
+      [style.width.px]="box.width"
+      [style.height.px]="box.height"
+    >
+      @for (handle of box.handles; track handle) {
+        <span
+          class="selection-handle"
+          [attr.data-handle]="handle"
+          (pointerdown)="onHandleDown($event, handle)"
+        ></span>
+      }
+    </div>
+  }
+
+  @if (marquee(); as m) {
+    <div
+      class="marquee"
+      [style.left.px]="m.x"
+      [style.top.px]="m.y"
+      [style.width.px]="m.w"
+      [style.height.px]="m.h"
+    ></div>
+  }
+
+  @if (store.ruler().visible) {
+    <div class="ruler" [style.transform]="rulerTransform()" (pointerdown)="onRulerDown($event, 'move')">
+      @for (cm of rulerMarks; track cm) {
+        <span class="ruler-label" [style.left.cm]="cm">{{ cm }}</span>
+      }
+      <button
+        type="button"
+        class="ruler-button ruler-close"
+        aria-label="Lineal ausblenden"
+        (pointerdown)="$event.stopPropagation()"
+        (click)="closeRuler()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <button
+        type="button"
+        class="ruler-button ruler-rotate"
+        aria-label="Lineal drehen"
+        (pointerdown)="onRulerDown($event, 'rotate')"
+      >
+        <mat-icon>rotate_right</mat-icon>
+      </button>
+    </div>
+  }
+
+  @if (store.items().length === 0 && store.tool() === 'select') {
+    <div class="empty-hint">
+      <strong>Dein Board ist leer.</strong>
+      <span>Zeichne mit den Stiften, ziehe Bilder hierher oder füge sie mit Strg+V ein.</span>
+      <span>Doppelklick auf eine freie Stelle erstellt ein Markdown-Textfeld.</span>
+    </div>
+  }
+</div>
