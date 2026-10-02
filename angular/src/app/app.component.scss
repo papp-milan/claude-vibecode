@@ -35,3 +35,12 @@
   justify-content: flex-start;
   padding: 0 0.5rem;
 }
+
+.logo {
+  width: 4.5rem;
+  border-radius: 2rem;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 2;
+}
