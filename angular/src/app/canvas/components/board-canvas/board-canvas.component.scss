@@ -13,13 +13,13 @@
   background-repeat: repeat;
 
   &.dark {
-    --board-bg: #1b1f24;
-    --dot: rgba(255, 255, 255, 0.2);
+    --board-bg: #121212;
+    --dot: rgba(242, 239, 233, 0.14);
   }
 
   &.light {
-    --board-bg: #f7f7f4;
-    --dot: rgba(0, 0, 0, 0.22);
+    --board-bg: #f5f3ee;
+    --dot: rgba(23, 23, 23, 0.15);
   }
 
   &[data-tool='select'] {

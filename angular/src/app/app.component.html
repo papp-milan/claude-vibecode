@@ -1,32 +1,50 @@
 <mat-sidenav-container class="app-container">
   <mat-sidenav mode="side" opened class="app-sidenav">
     <div class="sidenav-inner">
-      <nav class="nav-buttons">
-        <a matButton routerLink="/wheel-of-fortune" routerLinkActive="active">
-          <mat-icon>casino</mat-icon>
-          Wheel of Fortune
-        </a>
-        <a matButton routerLink="/scrum-poker" routerLinkActive="active">
-          <mat-icon>style</mat-icon>
-          Scrum Poker
-        </a>
-        <a matButton routerLink="/canvas" routerLinkActive="active">
-          <mat-icon>color_lens</mat-icon>
-          Canvas
-        </a>
-        <a matButton routerLink="/battleships" routerLinkActive="active">
-          <mat-icon>directions_boat</mat-icon>
-          Battleships
-        </a>
-      </nav>
+      <div>
+        <div class="brand">
+          <div class="brand-mark">
+            <img src="/phoenix.png" alt="Phoenix Logo" />
+          </div>
+          <div>
+            <div class="brand-kicker">// PROJECT</div>
+            <div class="brand-name">Claude Vibecode</div>
+          </div>
+        </div>
+
+        <div class="nav-section-label">// TOOLBOX</div>
+        <nav class="nav-buttons" aria-label="Werkzeuge">
+          <a matButton routerLink="/wheel-of-fortune" routerLinkActive="active">
+            <span class="nav-index">01</span>
+            <span class="nav-label">Wheel of Fortune</span>
+            <mat-icon>casino</mat-icon>
+          </a>
+          <a matButton routerLink="/scrum-poker" routerLinkActive="active">
+            <span class="nav-index">02</span>
+            <span class="nav-label">Scrum Poker</span>
+            <mat-icon>style</mat-icon>
+          </a>
+          <a matButton routerLink="/canvas" routerLinkActive="active">
+            <span class="nav-index">03</span>
+            <span class="nav-label">Canvas</span>
+            <mat-icon>color_lens</mat-icon>
+          </a>
+          <a matButton routerLink="/battleships" routerLinkActive="active">
+            <span class="nav-index">04</span>
+            <span class="nav-label">Battleships</span>
+            <mat-icon>directions_boat</mat-icon>
+          </a>
+        </nav>
+      </div>
 
       <div class="sidenav-footer">
+        <div class="footer-label">// THEME</div>
         <app-theme-toggle />
       </div>
     </div>
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <mat-sidenav-content class="app-content">
     <router-outlet />
   </mat-sidenav-content>
 </mat-sidenav-container>

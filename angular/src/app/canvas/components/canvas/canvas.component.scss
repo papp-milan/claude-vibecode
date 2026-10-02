@@ -1,45 +1,113 @@
 :host {
   display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.canvas-app {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+
+  padding: 2rem clamp(1rem, 3vw, 3rem) 3rem;
+  box-sizing: border-box;
+}
+
+/*
+ * Header
+ *
+ * Eigene Grid-Zeile außerhalb des eigentlichen Canvas.
+ * Dadurch kann app-board-canvas ihn weder überdecken
+ * noch seine Höhe beeinflussen.
+ */
+.canvas-header {
+  width: 100%;
+  min-width: 0;
+  padding-bottom: 2rem;
+}
+
+.canvas-header .page-header {
+  margin: 0;
+}
+
+/*
+ * Der gesamte verbleibende Platz gehört ausschließlich
+ * dem Whiteboard.
+ */
+.canvas-workspace {
   position: relative;
-  /* Höhe an dein Layout anpassen (z. B. Toolbar-Höhe abziehen). */
-  height: var(--canvas-height, calc(100dvh - 4rem));
-  min-height: 30rem;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+
   overflow: hidden;
 }
 
+/*
+ * app-board-canvas wird innerhalb des Workspaces
+ * absolut positioniert.
+ */
 .canvas {
   position: absolute;
   inset: 0;
+
+  display: block;
+  width: 100%;
+  height: 100%;
 }
+
+/* ---------- Floating Panels ---------- */
 
 .panel {
   position: absolute;
   z-index: 2;
+
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.375rem;
-  border-radius: 0.75rem;
-  background: var(--mat-sys-surface-container, #2b3036);
-  color: var(--mat-sys-on-surface, #eceff1);
-  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.35);
+
+  padding: 0.3rem;
+
+  border: 1px solid var(--app-border);
+  border-radius: 0.2rem;
+
+  background: color-mix(
+      in srgb,
+      var(--app-surface-raised) 96%,
+      transparent
+  );
+
+  color: var(--app-text);
+
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.18);
 }
 
 .toolbar {
   top: 50%;
   left: 0.75rem;
+
   flex-direction: column;
+
   max-height: calc(100% - 1.5rem);
   overflow-y: auto;
+
   transform: translateY(-50%);
 }
 
 .options {
   top: 0.75rem;
   left: 50%;
+
   flex-wrap: wrap;
   justify-content: center;
+
   max-width: calc(100% - 14rem);
+
   transform: translateX(-50%);
 }
 
@@ -53,34 +121,47 @@
   bottom: 0.75rem;
 }
 
+/* ---------- Tools ---------- */
+
 .tool,
 .shape-option {
   --mat-icon-button-state-layer-size: 2.5rem;
   --mat-icon-button-icon-size: 1.5rem;
+
   width: 2.5rem;
   height: 2.5rem;
+
   padding: 0.5rem;
+
   flex: none;
 
   &.active {
-    background: color-mix(in srgb, var(--mat-sys-primary, #4fc3f7) 28%, transparent);
-    color: var(--mat-sys-primary, #4fc3f7);
+    background: var(--app-accent-soft);
+    color: var(--app-accent);
   }
 }
 
+/* ---------- Divider ---------- */
+
 .divider {
   flex: none;
+
   width: 1.5rem;
   height: 0.0625rem;
+
   margin: 0.25rem 0;
-  background: rgba(128, 128, 128, 0.5);
+
+  background: var(--app-border);
 
   &.horizontal {
     width: 0.0625rem;
     height: 1.5rem;
+
     margin: 0 0.25rem;
   }
 }
+
+/* ---------- Shapes ---------- */
 
 .shape-icon {
   width: 1.5rem;
@@ -91,8 +172,11 @@
   display: grid;
   grid-template-columns: repeat(5, 2.5rem);
   gap: 0.25rem;
+
   padding: 0.5rem;
 }
+
+/* ---------- Options ---------- */
 
 .option-button {
   display: inline-flex;
@@ -102,20 +186,31 @@
 
 .swatch {
   display: inline-block;
+
   width: 1.125rem;
   height: 1.125rem;
+
   border: 0.125rem solid rgba(255, 255, 255, 0.5);
   border-radius: 50%;
 
   &.none {
-    background: linear-gradient(135deg, transparent 45%, #e53935 45%, #e53935 55%, transparent 55%);
+    background: linear-gradient(
+        135deg,
+        transparent 45%,
+        #e53935 45%,
+        #e53935 55%,
+        transparent 55%
+    );
   }
 }
+
+/* ---------- Stroke size ---------- */
 
 .size-control {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+
   padding: 0 0.5rem;
 
   mat-slider {
@@ -124,13 +219,18 @@
   }
 }
 
+/* ---------- Zoom ---------- */
+
 .zoom-label {
   min-width: 4.5rem;
 }
 
+/* ---------- Responsive ---------- */
+
 @media (max-width: 56rem) {
   .options {
-    max-width: calc(100% - 5.5rem);
     top: 4.25rem;
+
+    max-width: calc(100% - 5.5rem);
   }
 }

@@ -28,7 +28,7 @@
 .swatch {
   aspect-ratio: 1;
   padding: 0;
-  border: 0.125rem solid rgba(255, 255, 255, 0.3);
+  border: 0.125rem solid var(--app-border-strong);
   border-radius: 50%;
   cursor: pointer;
   outline: none;
@@ -39,8 +39,8 @@
 
   &:focus-visible,
   &.selected {
-    border-color: var(--mat-sys-primary, #4fc3f7);
-    box-shadow: 0 0 0 0.125rem var(--mat-sys-primary, #4fc3f7);
+    border-color: var(--app-accent);
+    box-shadow: 0 0 0 0.125rem var(--app-accent-soft);
   }
 
   &.none {
@@ -57,7 +57,7 @@
 .section-label {
   margin-top: 0.25rem;
   font-size: 0.75rem;
-  color: var(--mat-sys-on-surface-variant, #b0bec5);
+  color: var(--app-muted);
 }
 
 .channel {

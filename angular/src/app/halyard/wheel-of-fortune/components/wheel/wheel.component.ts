@@ -25,7 +25,7 @@ import {TeamMembers} from '../../../constants/team-members';
     MatListModule,
   ],
   templateUrl: './wheel.component.html',
-  styleUrl: './wheel.component.scss'
+  styleUrl: './wheel.component.scss',
 })
 export class WheelComponent {
   private dialog = inject(MatDialog);
@@ -34,17 +34,17 @@ export class WheelComponent {
   wheelNames = signal<string[]>([]);
 
   private palette = [
-    '#0d47a1',
-    '#1565c0',
-    '#1976d2',
-    '#1e88e5',
-    '#2196f3',
-    '#42a5f5',
-    '#64b5f6',
-    '#90caf9',
-    '#bbdefb',
-    '#e3f2fd',
-    '#ffffff'
+    '#F4F0E8',
+    '#D8D2C8',
+    '#B8B1A7',
+    '#8F8981',
+    '#68635D',
+    '#45413D',
+    '#2F2C29',
+    '#1F1D1B',
+    '#C94A3A',
+    '#A83225',
+    '#11100F',
   ];
   segmentColors = signal<string[]>([]);
 
@@ -83,10 +83,11 @@ export class WheelComponent {
     }
 
     if (n > 1 && colors[n - 1] === colors[0]) {
-      const alt = this.palette.filter(c => c !== colors[0] && c !== colors[n - 2]);
-      colors[n - 1] = alt.length > 0
-        ? alt[Math.floor(Math.random() * alt.length)]
-        : this.palette.find(c => c !== colors[0])!;
+      const alt = this.palette.filter((c) => c !== colors[0] && c !== colors[n - 2]);
+      colors[n - 1] =
+        alt.length > 0
+          ? alt[Math.floor(Math.random() * alt.length)]
+          : this.palette.find((c) => c !== colors[0])!;
     }
 
     return colors;
@@ -126,9 +127,10 @@ export class WheelComponent {
 
   segmentAngle = computed(() => 360 / (this.wheelNames().length || 1));
 
+
   labelColor(index: number): string {
-    const lightColors = ['#ffffff', '#e3f2fd', '#bbdefb', '#90caf9', '#64b5f6'];
-    return lightColors.includes(this.segmentColor(index)) ? '#0d47a1' : '#ffffff';
+    const lightColors = ['#F4F0E8', '#D8D2C8', '#B8B1A7'];
+    return lightColors.includes(this.segmentColor(index)) ? '#A83225' : '#ffffff';
   }
 
   labelTransform(index: number): string {
@@ -140,12 +142,12 @@ export class WheelComponent {
   addName() {
     const trimmed = this.newName().trim();
     if (!trimmed) return;
-    this.names.update(list => [...list, trimmed]);
+    this.names.update((list) => [...list, trimmed]);
     this.newName.set('');
   }
 
   removeName(index: number) {
-    this.names.update(list => list.filter((_, i) => i !== index));
+    this.names.update((list) => list.filter((_, i) => i !== index));
   }
 
   spin() {
@@ -181,12 +183,12 @@ export class WheelComponent {
 
   private openWinnerDialog(winnerName: string) {
     const ref = this.dialog.open(WinnerDialogComponent, {
-      data: { winner: winnerName } as WinnerDialogData
+      data: { winner: winnerName } as WinnerDialogData,
     });
 
-    ref.afterClosed().subscribe(shouldRemove => {
+    ref.afterClosed().subscribe((shouldRemove) => {
       if (shouldRemove) {
-        this.pastWinners.update(list => [winnerName, ...list]);
+        this.pastWinners.update((list) => [winnerName, ...list]);
         const index = this.names().indexOf(winnerName);
         if (index !== -1) {
           this.removeName(index);

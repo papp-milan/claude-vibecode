@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+button {
+  --mdc-icon-button-icon-color: var(--app-muted);
+  --mdc-icon-button-state-layer-size: 2.2rem;
+  border: 1px solid var(--app-border) !important;
+  border-radius: 0.2rem !important;
+
+  &:hover {
+    color: var(--app-text);
+  }
+}

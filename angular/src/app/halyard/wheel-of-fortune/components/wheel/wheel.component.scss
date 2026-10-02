@@ -1,25 +1,29 @@
 .wheel-app {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 2rem;
+  align-items: stretch;
+  gap: 2rem;
   width: 100%;
+  min-height: 100%;
+  padding: 2rem clamp(1rem, 3vw, 3rem) 3rem;
   box-sizing: border-box;
 }
 
 .main-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
   width: 100%;
-  gap: 2rem;
+  max-width: 88rem;
+  gap: clamp(2rem, 4vw, 5rem);
   flex-wrap: wrap;
 }
 
 .names-card {
-  flex: 1 1 21.25rem;
+  flex: 1 1 21rem;
   max-width: 25rem;
+  border: 1px solid var(--app-border) !important;
+  background: var(--app-surface-raised) !important;
 }
 
 .add-row {
@@ -36,51 +40,49 @@
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 3.25rem;
+    height: 3.25rem;
     min-width: 0;
     padding: 0;
-    border-radius: 0.75rem;
-
-    mat-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 1.5rem;
-      width: 1.5rem;
-      font-size: 1.5rem;
-      margin: 0;
-    }
+    border-radius: 0.2rem;
   }
 }
 
 .name-list {
+  margin-top: 0.75rem;
   overflow-y: auto;
+
+  mat-list-item {
+    border-top: 1px solid var(--app-border);
+  }
 }
 
 .wheel-section {
-  flex: 1 1 20rem;
+  flex: 1 1 30rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .wheel-wrapper {
   position: relative;
-  width: 42rem;
-  height: 42rem;
+  width: min(42rem, 70vw);
+  height: min(42rem, 70vw);
+  min-width: 18rem;
+  min-height: 18rem;
 }
 
 .wheel {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 0.375rem solid #333;
+  border: 0.35rem solid var(--app-border-strong);
   position: relative;
   transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
   cursor: not-allowed;
   overflow: hidden;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.16);
 
   &.spinnable {
     cursor: pointer;
@@ -98,7 +100,7 @@
   position: absolute;
   transform: translate(-50%, -50%);
   display: inline-block;
-  font-weight: bold;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -111,13 +113,26 @@
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 0.9375rem solid transparent;
-  border-right: 0.9375rem solid transparent;
-  border-top: 1.5625rem solid #333;
+  border-left: 0.9rem solid transparent;
+  border-right: 0.9rem solid transparent;
+  border-top: 1.45rem solid var(--app-accent);
   z-index: 10;
+  filter: drop-shadow(0 0.2rem 0.25rem rgba(0, 0, 0, 0.2));
 }
 
 .spin-btn {
-  font-size: 1.1rem;
-  padding: 0.5rem 2rem;
+  min-width: 10rem;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.75rem;
+}
+
+@media (max-width: 700px) {
+  .wheel-app {
+    padding-top: 1.25rem;
+  }
+
+  .wheel-wrapper {
+    width: min(34rem, 90vw);
+    height: min(34rem, 90vw);
+  }
 }
