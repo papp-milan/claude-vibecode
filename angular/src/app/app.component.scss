@@ -59,6 +59,20 @@
   font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+
+  .link {
+    color: var(--app-text);
+    text-decoration: none;
+    transition: color 300ms ease-in-out;
+
+    &:visited {
+      color: var(--app-text);
+    }
+
+    &:hover {
+      color: var(--app-accent);
+    }
+  }
 }
 
 .nav-section-label {
