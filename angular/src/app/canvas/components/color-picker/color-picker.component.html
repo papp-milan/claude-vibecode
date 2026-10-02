@@ -1,0 +1,86 @@
+<div class="picker">
+  <mat-button-toggle-group
+    class="palette-toggle"
+    hideSingleSelectionIndicator
+    aria-label="Farbpalette"
+    [value]="paletteId()"
+    (change)="selectPalette($event)"
+  >
+    @for (p of palettes; track p.id) {
+      <mat-button-toggle [value]="p.id">{{ p.name }}</mat-button-toggle>
+    }
+  </mat-button-toggle-group>
+
+  <div class="swatches">
+    @if (allowNone()) {
+      <button
+        type="button"
+        class="swatch none"
+        aria-label="Keine Füllung"
+        [class.selected]="value() === null"
+        (click)="pick(null)"
+      ></button>
+    }
+    @for (color of palette().colors; track color) {
+      <button
+        type="button"
+        class="swatch"
+        [style.background]="color"
+        [attr.aria-label]="color"
+        [class.selected]="value() === color"
+        (click)="pick(color)"
+      ></button>
+    }
+  </div>
+
+  @if (recent().length) {
+    <div class="section-label">Zuletzt verwendet</div>
+    <div class="swatches">
+      @for (color of recent(); track color) {
+        <button
+          type="button"
+          class="swatch"
+          [style.background]="color"
+          [attr.aria-label]="color"
+          [class.selected]="value() === color"
+          (click)="pick(color)"
+        ></button>
+      }
+    </div>
+  }
+
+  <div class="section-label">Eigene Farbe (RGB)</div>
+  @for (channel of channels; track channel.index) {
+    <div class="channel">
+      <span class="channel-name">{{ channel.label }}</span>
+      <mat-slider min="0" max="255" step="1">
+        <input
+          matSliderThumb
+          [attr.aria-label]="channel.label"
+          [value]="rgb()[channel.index]"
+          (valueChange)="setChannel(channel.index, $event)"
+        />
+      </mat-slider>
+      <span class="channel-value">{{ rgb()[channel.index] }}</span>
+    </div>
+  }
+
+  <div class="manual">
+    <input
+      type="color"
+      class="native-color"
+      aria-label="Farbwähler des Systems"
+      [value]="hex()"
+      (input)="onNative($event)"
+    />
+    <input
+      type="text"
+      class="hex-input"
+      maxlength="7"
+      spellcheck="false"
+      aria-label="Hex-Farbwert"
+      [value]="hex()"
+      (change)="onHex($event)"
+    />
+  </div>
+</div>

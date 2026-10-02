@@ -1,0 +1,214 @@
+<app-board-canvas class="canvas" />
+
+<!-- Werkzeugleiste -->
+<nav class="panel toolbar" aria-label="Werkzeuge">
+  @for (t of tools; track t.tool) {
+    @if (t.dividerBefore) {
+      <span class="divider"></span>
+    }
+    <button
+      mat-icon-button
+      class="tool"
+      [class.active]="store.tool() === t.tool"
+      [matTooltip]="t.label + ' (' + t.key + ')'"
+      matTooltipPosition="right"
+      [attr.aria-label]="t.label"
+      [attr.aria-pressed]="store.tool() === t.tool"
+      (click)="store.tool.set(t.tool)"
+    >
+      <mat-icon>{{ t.icon }}</mat-icon>
+    </button>
+  }
+
+  <span class="divider"></span>
+
+  <button
+    mat-icon-button
+    class="tool"
+    [class.active]="store.tool() === 'shape'"
+    [matMenuTriggerFor]="shapeMenu"
+    matTooltip="Formen & Sticker"
+    matTooltipPosition="right"
+    aria-label="Formen und Sticker"
+  >
+    <svg class="shape-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        [attr.d]="store.shapeKind() | shapePath: 18 : 18"
+        transform="translate(3 3)"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+
+  <button
+    mat-icon-button
+    class="tool"
+    matTooltip="Bild einfügen (oder per Drag & Drop / Strg+V)"
+    matTooltipPosition="right"
+    aria-label="Bild einfügen"
+    (click)="imageInput.click()"
+  >
+    <mat-icon>image</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    class="tool"
+    [class.active]="store.ruler().visible"
+    matTooltip="Lineal (R)"
+    matTooltipPosition="right"
+    aria-label="Lineal"
+    (click)="store.toggleRuler()"
+  >
+    <mat-icon>straighten</mat-icon>
+  </button>
+</nav>
+
+<mat-menu #shapeMenu="matMenu">
+  <div class="shape-grid">
+    @for (s of shapes; track s.kind) {
+      <button
+        mat-icon-button
+        class="shape-option"
+        [class.active]="store.shapeKind() === s.kind"
+        [matTooltip]="s.label"
+        [attr.aria-label]="s.label"
+        (click)="chooseShape(s.kind)"
+      >
+        <svg class="shape-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            [attr.d]="s.kind | shapePath: 18 : 18"
+            transform="translate(3 3)"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    }
+  </div>
+</mat-menu>
+
+<!-- Optionen: Farbe, Füllung, Stärke, Auswahl-Aktionen -->
+<div class="panel options">
+  <button mat-stroked-button class="option-button" [matMenuTriggerFor]="colorMenu" matTooltip="Farbe">
+    <span class="swatch" [style.background]="store.color()"></span>
+    Farbe
+  </button>
+  <mat-menu #colorMenu="matMenu">
+    <div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+      <app-color-picker
+        [value]="store.color()"
+        [recent]="store.recentColors()"
+        (valueChange)="onColor($event)"
+      />
+    </div>
+  </mat-menu>
+
+  @if (showFill()) {
+    <button mat-stroked-button class="option-button" [matMenuTriggerFor]="fillMenu" matTooltip="Füllung">
+      <span class="swatch" [class.none]="store.fill() === null" [style.background]="store.fill()"></span>
+      Füllung
+    </button>
+    <mat-menu #fillMenu="matMenu">
+      <div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+        <app-color-picker
+          [value]="store.fill()"
+          [allowNone]="true"
+          [recent]="store.recentColors()"
+          (valueChange)="onFill($event)"
+        />
+      </div>
+    </mat-menu>
+  }
+
+  @if (showSize()) {
+    <div class="size-control" matTooltip="Strichstärke">
+      <mat-icon>line_weight</mat-icon>
+      <mat-slider min="1" max="40" step="1" discrete>
+        <input matSliderThumb aria-label="Strichstärke" [value]="store.size()" (valueChange)="store.setSize($event)" />
+      </mat-slider>
+    </div>
+  }
+
+  @if (store.selection().size) {
+    <span class="divider horizontal"></span>
+    <button mat-icon-button matTooltip="Duplizieren (Strg+D)" aria-label="Duplizieren" (click)="store.duplicateSelected()">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Nach vorne" aria-label="Nach vorne" (click)="store.bringToFront()">
+      <mat-icon>flip_to_front</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Nach hinten" aria-label="Nach hinten" (click)="store.sendToBack()">
+      <mat-icon>flip_to_back</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Löschen (Entf)" aria-label="Löschen" (click)="store.removeSelected()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  }
+
+  <span class="divider horizontal"></span>
+  <button
+    mat-icon-button
+    [matTooltip]="store.background() === 'dark' ? 'Helles Board' : 'Dunkles Board'"
+    aria-label="Hintergrund wechseln"
+    (click)="toggleBackground()"
+  >
+    <mat-icon>{{ store.background() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+</div>
+
+<!-- Verlauf, Export, Import -->
+<div class="panel history">
+  <button mat-icon-button matTooltip="Rückgängig (Strg+Z)" aria-label="Rückgängig" [disabled]="!store.canUndo()" (click)="store.undo()">
+    <mat-icon>undo</mat-icon>
+  </button>
+  <button mat-icon-button matTooltip="Wiederholen (Strg+Y)" aria-label="Wiederholen" [disabled]="!store.canRedo()" (click)="store.redo()">
+    <mat-icon>redo</mat-icon>
+  </button>
+  <span class="divider horizontal"></span>
+  <button mat-icon-button [matMenuTriggerFor]="fileMenu" matTooltip="Exportieren / Importieren" aria-label="Datei">
+    <mat-icon>download</mat-icon>
+  </button>
+  <button mat-icon-button matTooltip="Board leeren" aria-label="Board leeren" (click)="clearBoard()">
+    <mat-icon>delete_sweep</mat-icon>
+  </button>
+</div>
+
+<mat-menu #fileMenu="matMenu">
+  <button mat-menu-item (click)="exportPng()">
+    <mat-icon>image</mat-icon>
+    <span>Als PNG exportieren</span>
+  </button>
+  <button mat-menu-item (click)="exportJson()">
+    <mat-icon>data_object</mat-icon>
+    <span>Als JSON exportieren</span>
+  </button>
+  <button mat-menu-item (click)="importInput.click()">
+    <mat-icon>upload_file</mat-icon>
+    <span>JSON importieren</span>
+  </button>
+</mat-menu>
+
+<!-- Zoom -->
+<div class="panel zoom">
+  <button mat-icon-button matTooltip="Verkleinern" aria-label="Verkleinern" (click)="store.zoomBy(1 / 1.25)">
+    <mat-icon>zoom_out</mat-icon>
+  </button>
+  <button mat-button class="zoom-label" matTooltip="Auf 100 % zurücksetzen" (click)="store.resetView()">
+    {{ zoomLabel() }}
+  </button>
+  <button mat-icon-button matTooltip="Vergrößern" aria-label="Vergrößern" (click)="store.zoomBy(1.25)">
+    <mat-icon>zoom_in</mat-icon>
+  </button>
+  <button mat-icon-button matTooltip="Alles einpassen" aria-label="Alles einpassen" (click)="store.fitToContent()">
+    <mat-icon>fit_screen</mat-icon>
+  </button>
+</div>
+
+<input #imageInput type="file" accept="image/*" multiple hidden (change)="onImagePicked($event)" />
+<input #importInput type="file" accept=".json,application/json" hidden (change)="onImportPicked($event)" />

@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatDialog } from '@angular/material/dialog';
-import { ThemeToggleComponent } from '../../../../layout/theme-toggle/theme-toggle.component';
 import { WinnerDialogComponent, WinnerDialogData } from '../winner-dialog/winner-dialog.component';
 import {TeamMembers} from '../../../constants/team-members';
 
@@ -24,7 +23,6 @@ import {TeamMembers} from '../../../constants/team-members';
     MatButtonModule,
     MatIconModule,
     MatListModule,
-    ThemeToggleComponent
   ],
   templateUrl: './wheel.component.html',
   styleUrl: './wheel.component.scss'
