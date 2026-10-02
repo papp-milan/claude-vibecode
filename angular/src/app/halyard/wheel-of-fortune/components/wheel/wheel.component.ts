@@ -130,7 +130,7 @@ export class WheelComponent {
 
   labelColor(index: number): string {
     const lightColors = ['#F4F0E8', '#D8D2C8', '#B8B1A7'];
-    return lightColors.includes(this.segmentColor(index)) ? '#A83225' : '#ffffff';
+    return lightColors.includes(this.segmentColor(index)) ? '#1F1D1B' : '#ffffff';
   }
 
   labelTransform(index: number): string {
