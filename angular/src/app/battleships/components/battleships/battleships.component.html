@@ -1,0 +1,144 @@
+@if (game.phase() === 'setup') {
+  <mat-card appearance="outlined" class="setup-card">
+    <mat-card-header>
+      <mat-card-title>Schiffe versenken</mat-card-title>
+      <mat-card-subtitle>Wähle die Farbe deiner Flotte</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="color-choice">
+        <button mat-flat-button class="color-btn blue" (click)="game.chooseColor('blue')">
+          <mat-icon>directions_boat</mat-icon>
+          Blau
+        </button>
+        <button mat-flat-button class="color-btn red" (click)="game.chooseColor('red')">
+          <mat-icon>directions_boat</mat-icon>
+          Rot
+        </button>
+      </div>
+      <p class="hint">
+        Danach platzierst du deine fünf Schiffe. Sobald alle liegen, startet das Gefecht gegen den
+        Computer.
+      </p>
+    </mat-card-content>
+  </mat-card>
+} @else if (game.phase() === 'placing') {
+  <div class="layout">
+    <div class="board-slot">
+      <app-battleship-board
+        [ships]="game.playerShips()"
+        [revealShips]="true"
+        [interactive]="true"
+        [color]="game.playerColor()"
+        [ghost]="ghost()"
+        (cellClick)="onPlace($event)"
+        (cellRotate)="game.toggleOrientation()"
+        (cellHover)="hover.set($event)"
+      />
+    </div>
+
+    <mat-card appearance="outlined" class="panel">
+      <mat-card-header>
+        <mat-card-title>Flotte platzieren</mat-card-title>
+        <mat-card-subtitle>Linksklick: setzen · Rechtsklick oder R: drehen</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @if (game.nextToPlace(); as next) {
+          <div class="next-ship">
+            <div
+              class="ship-preview"
+              [style.width.rem]="previewBox().width"
+              [style.height.rem]="previewBox().height"
+            >
+              <app-ship-graphic
+                [size]="next.size"
+                [orientation]="game.orientation()"
+                [color]="game.playerColor()"
+              />
+            </div>
+            <div class="next-ship-text">
+              <strong>{{ next.name }}</strong>
+              <span>{{ next.size }} Felder</span>
+            </div>
+          </div>
+        }
+
+        <ul class="fleet-list">
+          @for (item of game.placementList(); track item.id) {
+            <li [class.current]="item.current" [class.placed]="item.placed">
+              <mat-icon>{{ item.placed ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              {{ item.name }} ({{ item.size }})
+            </li>
+          }
+        </ul>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="game.toggleOrientation()">
+          <mat-icon>rotate_right</mat-icon>
+          Drehen
+        </button>
+        <button mat-button [disabled]="game.playerShips().length === 0" (click)="game.undoPlacement()">
+          <mat-icon>undo</mat-icon>
+          Zurück
+        </button>
+        <button mat-button (click)="game.randomizePlacement()">
+          <mat-icon>shuffle</mat-icon>
+          Zufällig
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+} @else {
+  <mat-card appearance="outlined" class="status">
+    <mat-card-content>
+      <div class="status-text">
+        <strong>{{ game.statusText() }}</strong>
+        @if (game.lastEvent()) {
+          <span class="event">{{ game.lastEvent() }}</span>
+        }
+      </div>
+      @if (game.phase() === 'over') {
+        <button mat-flat-button (click)="game.reset()">
+          <mat-icon>replay</mat-icon>
+          Neues Spiel
+        </button>
+      }
+    </mat-card-content>
+    @if (game.botThinking()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+  </mat-card>
+
+  <div class="boards">
+    <section class="board-section">
+      <h2>Dein Feld</h2>
+      <app-battleship-board
+        [ships]="game.playerShips()"
+        [shots]="game.shotsAtPlayer()"
+        [revealShips]="true"
+        [color]="game.playerColor()"
+      />
+      <mat-chip-set class="fleet-status" aria-label="Deine Flotte">
+        @for (ship of game.playerFleetStatus(); track ship.id) {
+          <mat-chip [class.sunk]="ship.sunk" disableRipple>{{ ship.name }} ({{ ship.size }})</mat-chip>
+        }
+      </mat-chip-set>
+    </section>
+
+    <section class="board-section">
+      <h2>Gegnerisches Feld</h2>
+      <app-battleship-board
+        [ships]="game.botShips()"
+        [shots]="game.shotsAtBot()"
+        [revealShips]="game.phase() === 'over'"
+        [interactive]="game.canShoot()"
+        [color]="game.botColor()"
+        (cellClick)="game.fire($event)"
+      />
+      <mat-chip-set class="fleet-status" aria-label="Gegnerische Flotte">
+        @for (ship of game.botFleetStatus(); track ship.id) {
+          <mat-chip [class.sunk]="ship.sunk" disableRipple>{{ ship.name }} ({{ ship.size }})</mat-chip>
+        }
+      </mat-chip-set>
+    </section>
+  </div>
+}

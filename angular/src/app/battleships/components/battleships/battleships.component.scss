@@ -1,0 +1,149 @@
+:host {
+  display: block;
+  padding: 1.5rem;
+}
+
+.setup-card {
+  max-width: 32rem;
+  margin: 2rem auto;
+}
+
+.color-choice {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.color-btn {
+  flex: 1;
+  height: 4.5rem;
+  font-size: 1.125rem;
+
+  &.blue {
+    --mat-button-filled-container-color: #1e88e5;
+    --mat-button-filled-label-text-color: #fff;
+  }
+
+  &.red {
+    --mat-button-filled-container-color: #e53935;
+    --mat-button-filled-label-text-color: #fff;
+  }
+}
+
+.hint {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant, #b0bec5);
+}
+
+/* ---------- Platzieren ---------- */
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.board-slot {
+  flex: 1 1 22rem;
+  max-width: 32rem;
+}
+
+.panel {
+  width: 100%;
+  max-width: 22rem;
+}
+
+.next-ship {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  min-height: 3rem;
+}
+
+.ship-preview {
+  flex: none;
+}
+
+.next-ship-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.fleet-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    color: var(--mat-sys-on-surface-variant, #b0bec5);
+
+    &.current {
+      color: var(--mat-sys-on-surface, #fff);
+      font-weight: 500;
+    }
+
+    &.placed mat-icon {
+      color: #66bb6a;
+    }
+  }
+}
+
+/* ---------- Kampf ---------- */
+
+.status {
+  max-width: 72rem;
+  margin: 0 auto 1.5rem;
+
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-block: 1rem;
+  }
+}
+
+.status-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.event {
+  color: var(--mat-sys-on-surface-variant, #b0bec5);
+}
+
+.boards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.board-section {
+  flex: 1 1 22rem;
+  max-width: 32rem;
+
+  h2 {
+    margin: 0 0 0.5rem 1.5rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+}
+
+.fleet-status {
+  margin: 0.75rem 0 0 1.5rem;
+
+  .sunk {
+    opacity: 0.55;
+    text-decoration: line-through;
+  }
+}

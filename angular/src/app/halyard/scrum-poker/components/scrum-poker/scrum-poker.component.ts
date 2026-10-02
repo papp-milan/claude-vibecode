@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import {TeamMembers} from '../../constants/team-members';
+import {TeamMembers} from '../../../constants/team-members';
 
 type CardValue = number | 'coffee';
 

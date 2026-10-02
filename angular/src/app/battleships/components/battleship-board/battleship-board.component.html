@@ -1,0 +1,73 @@
+<div class="board" [class.interactive]="interactive()">
+  <div class="col-labels" aria-hidden="true">
+    @for (label of columnLabels; track label) {
+      <span>{{ label }}</span>
+    }
+  </div>
+
+  <div class="row-labels" aria-hidden="true">
+    @for (label of rowLabels; track label) {
+      <span>{{ label }}</span>
+    }
+  </div>
+
+  <div class="grid" role="group" aria-label="Spielfeld" (mouseleave)="cellHover.emit(null)">
+    @for (cell of cells(); track cell.key) {
+      <button
+        type="button"
+        class="cell"
+        [class.shot]="cell.marker !== 'none'"
+        [class.last]="cell.last"
+        [style.grid-row]="cell.row + 1"
+        [style.grid-column]="cell.col + 1"
+        [attr.aria-label]="cell.label"
+        [attr.aria-disabled]="!interactive() || cell.marker !== 'none'"
+        (click)="onClick(cell)"
+        (contextmenu)="onContextMenu($event, cell)"
+        (mouseenter)="onEnter(cell)"
+      >
+        @switch (cell.marker) {
+          @case ('miss') {
+            <span class="marker splash"></span>
+          }
+          @case ('hit') {
+            <span class="marker blast"></span>
+            <span class="marker fire">🔥</span>
+          }
+          @case ('sunk') {
+            <span class="marker blast"></span>
+          }
+        }
+      </button>
+    }
+
+    @for (vm of visibleShips(); track vm.ship.id) {
+      <div
+        class="ship"
+        [style.grid-row]="rowArea(vm.ship)"
+        [style.grid-column]="colArea(vm.ship)"
+      >
+        <app-ship-graphic
+          [size]="vm.ship.size"
+          [orientation]="vm.ship.orientation"
+          [color]="color()"
+          [variant]="vm.sunk ? 'wreck' : 'fleet'"
+        />
+      </div>
+    }
+
+    @if (ghost(); as g) {
+      <div
+        class="ship ghost"
+        [style.grid-row]="rowArea(g.ship)"
+        [style.grid-column]="colArea(g.ship)"
+      >
+        <app-ship-graphic
+          [size]="g.ship.size"
+          [orientation]="g.ship.orientation"
+          [variant]="g.valid ? 'ghost-ok' : 'ghost-bad'"
+        />
+      </div>
+    }
+  </div>
+</div>
