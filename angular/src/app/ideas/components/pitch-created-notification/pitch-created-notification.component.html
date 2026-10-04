@@ -1,0 +1,23 @@
+@if (visible()) {
+  <div class="pitch-created-notification" role="status" aria-live="polite">
+    <mat-icon class="pitch-created-notification__icon" aria-hidden="true">check_circle</mat-icon>
+
+    <div class="pitch-created-notification__body">
+      <p class="pitch-created-notification__kicker">// SUCCESS</p>
+      <p class="pitch-created-notification__title">Pitch created</p>
+      @if (pitchTitle(); as title) {
+        <p class="pitch-created-notification__detail">{{ title }}</p>
+      }
+    </div>
+
+    <button
+      mat-icon-button
+      class="pitch-created-notification__close"
+      type="button"
+      aria-label="Benachrichtigung schließen"
+      (click)="dismissed.emit()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+}
